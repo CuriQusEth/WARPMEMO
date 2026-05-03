@@ -10,23 +10,22 @@ export function WalletConnect() {
   const { sendTransaction, isPending, isSuccess } = useSendTransaction()
   const [txHash, setTxHash] = useState<string | null>(null)
 
-  // Use the injected connector
-  const connector = connectors[0]
-
   const handleTestAttribution = () => {
     if (!address) return
     
     // ERC-8021 Builder Code Attribution for EOAs
-    // We append the hex-encoded builder code to the end of ordinary transaction data.
-    // For this example, we send a 0-value transaction to ourselves just to record the attribution onchain.
+    // Append the hex-encoded builder code, and the repeating 8021 string as specified in ERC-8021
     const builderCodeHex = toHex(BUILDER_CODE)
+    const erc8021Suffix = Array(8).fill("8021").join("")
+    
+    // Append suffix properly
+    const calldata = `${builderCodeHex}${erc8021Suffix}` as `0x${string}`
 
     sendTransaction(
       {
         to: address,   // Sending to ourselves as a dummy ping
         value: 0n,
-        // The ERC-8021 suffix is simply appended here
-        data: builderCodeHex,
+        data: calldata,
       },
       {
         onSuccess: (hash) => setTxHash(hash),
@@ -66,13 +65,16 @@ export function WalletConnect() {
   }
 
   return (
-    <div className="absolute top-4 right-4 z-50">
-      <button 
-        onClick={() => connect({ connector })}
-        className="bg-[#0A1128] border border-[#00F3FF] text-[#00F3FF] px-4 py-2 rounded text-[10px] uppercase font-bold tracking-[1px] shadow-[0_0_15px_rgba(0,243,255,0.2)] hover:bg-[#00F3FF] hover:text-[#050508] transition-colors"
-      >
-        Connect Web3
-      </button>
+    <div className="absolute top-4 right-4 z-50 flex flex-col gap-2 relative">
+      {connectors.map((connector) => (
+        <button 
+          key={connector.uid}
+          onClick={() => connect({ connector })}
+          className="bg-[#0A1128] border border-[#00F3FF] text-[#00F3FF] px-4 py-2 rounded text-[10px] uppercase font-bold tracking-[1px] shadow-[0_0_15px_rgba(0,243,255,0.2)] hover:bg-[#00F3FF] hover:text-[#050508] transition-colors"
+        >
+          Connect {connector.name}
+        </button>
+      ))}
     </div>
   )
 }
