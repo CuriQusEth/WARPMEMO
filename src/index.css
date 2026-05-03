@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@utility perspective-1000 {
+  perspective: 1000px;
+}
+
+@utility preserve-3d {
+  transform-style: preserve-3d;
+}
+
+@utility backface-hidden {
+  backface-visibility: hidden;
+}
+
+body {
+  background-color: #050508;
+  color: #E0E0FF;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden; /* Prevent scrolling for app-like feel */
+  touch-action: none; /* Prevent pull-to-refresh on mobile */
+}
