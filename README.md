@@ -1,20 +1,19 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Warp Memory
 
-# Run and deploy your AI Studio app
+Warp Memory is a fast-paced, sci-fi themed memory matching game with a unique "Warp" mechanic. This version features on-chain integration on Base Mainnet, ERC-8021 transaction attribution using "batchwizard" as its Builder Code, and Sign-In with Ethereum (SIWE) for high-score identity tying, leveraging the latest Wagmi v3 and Base Account functionality.
 
-This contains everything you need to run your app locally.
+## Features
+- Complete ERC-8021 standard compliance with TypeScript utilities in `src/lib/erc8021/`
+- Automatic attribution injection using React hooks (`useERC8021Transaction`)
+- "Say GM" simple on-chain transaction showing builder code integration in action
+- Full SIWE signature authentication for leaderboards
+- Coinbase Smart Wallet / injected providers compatibility via `@tanstack/react-query` & `wagmi`
+- Mobile-first, neon-fueled Sci-Fi Cyberpunk UI with Tailwind CSS & Framer Motion
 
-View your app in AI Studio: https://ai.studio/apps/3f44d29c-ce25-45b2-833a-0ec60a3d0dcb
+## ERC-8021 Specifications Implemented
+The game integrates Schema 0 validation and payload composition natively.
+Check `src/lib/erc8021` for utilities capable of:
+- generating arbitrary attribution suffixes for normal and batched transactions.
+- security validations ensuring the correct `8021` hexadecimal string formatting.
 
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Enjoy warping your memory metrics to Base!
