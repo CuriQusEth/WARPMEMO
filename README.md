@@ -1,19 +1,20 @@
-# Warp Memory
+# Warp Memory & WarpMemo Orchestrator
 
-Warp Memory is a fast-paced, sci-fi themed memory matching game with a unique "Warp" mechanic. This version features on-chain integration on Base Mainnet, ERC-8021 transaction attribution using "batchwizard" as its Builder Code, and Sign-In with Ethereum (SIWE) for high-score identity tying, leveraging the latest Wagmi v3 and Base Account functionality.
+Warp Memory is a fast-paced, sci-fi themed memory matching game with a unique "Warp" mechanic. This version features advanced on-chain integration on Base Mainnet, ERC-8021 transaction attribution using "batchwizard" as its Builder Code, and Sign-In with Ethereum (SIWE) for high-score identity tying, leveraging the latest Wagmi v3 and Base Account functionality.
 
-## Features
-- Complete ERC-8021 standard compliance with TypeScript utilities in `src/lib/erc8021/`
-- Automatic attribution injection using React hooks (`useERC8021Transaction`)
-- "Say GM" simple on-chain transaction showing builder code integration in action
-- Full SIWE signature authentication for leaderboards
-- Coinbase Smart Wallet / injected providers compatibility via `@tanstack/react-query` & `wagmi`
-- Mobile-first, neon-fueled Sci-Fi Cyberpunk UI with Tailwind CSS & Framer Motion
+Additionally, this project includes the **WarpMemo Orchestrator**, an ERC-8004 compliant AI agent with fully functional MCP (Model Context Protocol) support and agent APIs.
 
-## ERC-8021 Specifications Implemented
-The game integrates Schema 0 validation and payload composition natively.
-Check `src/lib/erc8021` for utilities capable of:
-- generating arbitrary attribution suffixes for normal and batched transactions.
-- security validations ensuring the correct `8021` hexadecimal string formatting.
+## Game Features
+- **Cyberpunk UI**: Mobile-first, neon-fueled Sci-Fi interface using Tailwind CSS & Framer Motion
+- **ERC-8021 Attribution**: Automatic attribution injection via React hooks (`useERC8021Transaction`) on Schema 0
+- **On-Chain Transactions**: "Say GM" simple on-chain transaction showcasing builder code integration
+- **Web3 Auth**: Full SIWE signature authentication for the leaderboard
+- **Wallet Support**: Coinbase Smart Wallet and injected providers compatibility via `@tanstack/react-query` & `wagmi`
 
-Enjoy warping your memory metrics to Base!
+## AI Agent & Orchestrator (ERC-8004)
+The WarpMemo Orchestrator handles memo management, content creation, multi-task automation, and daily operations.
+- **Agent Card**: Served at `/.well-known/agent-card.json` complying with ERC-8004 identity registration specifications.
+- **Agent Control API**: Interactive endpoint at `/api/agent` supplying agent metadata.
+- **MCP Server**: Fully active Model Context Protocol endpoints at `/api/mcp` for agent-to-agent operations and command executions.
+
+Enjoy warping your memory metrics to Base, commanded by your AI Orchestrator!
