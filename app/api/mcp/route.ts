@@ -1,5 +1,15 @@
 import { NextResponse } from 'next/server';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 export async function GET() {
   return NextResponse.json({
     protocol: "MCP",
@@ -9,7 +19,7 @@ export async function GET() {
     description: "Active MCP server for WarpMemo Orchestrator Agent",
     capabilities: ["memo-management", "content-generation", "task-automation"],
     timestamp: new Date().toISOString()
-  });
+  }, { headers: corsHeaders });
 }
 
 export async function POST(req: Request) {
@@ -36,7 +46,7 @@ export async function POST(req: Request) {
                 version: "1.0.0"
               }
             }
-          });
+          }, { headers: corsHeaders });
 
         case "tools/list":
           return NextResponse.json({
@@ -75,7 +85,7 @@ export async function POST(req: Request) {
                 }
               ]
             }
-          });
+          }, { headers: corsHeaders });
 
         case "tools/call":
           const toolName = params?.name;
@@ -95,7 +105,7 @@ export async function POST(req: Request) {
           } else {
             return NextResponse.json(
               { jsonrpc: "2.0", id, error: { code: -32601, message: "Tool not found" } },
-              { status: 404 }
+              { status: 404, headers: corsHeaders }
             );
           }
 
@@ -105,26 +115,26 @@ export async function POST(req: Request) {
             result: {
               content: [{ type: "text", text: toolResult }]
             }
-          });
+          }, { headers: corsHeaders });
 
         case "prompts/list":
           return NextResponse.json({
             jsonrpc: "2.0",
             id,
             result: { prompts: [] }
-          });
+          }, { headers: corsHeaders });
 
         case "resources/list":
           return NextResponse.json({
             jsonrpc: "2.0",
             id,
             result: { resources: [] }
-          });
+          }, { headers: corsHeaders });
 
         default:
           return NextResponse.json(
             { jsonrpc: "2.0", id, error: { code: -32601, message: "Method not found" } },
-            { status: 404 }
+            { status: 404, headers: corsHeaders }
           );
       }
     }
@@ -136,8 +146,8 @@ export async function POST(req: Request) {
       agent: "WarpMemo Orchestrator",
       receivedAt: new Date().toISOString(),
       payload: body
-    });
+    }, { headers: corsHeaders });
   } catch (error) {
-    return NextResponse.json({ error: "Invalid MCP request" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid MCP request" }, { status: 400, headers: corsHeaders });
   }
 }
