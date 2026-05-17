@@ -37,7 +37,7 @@ Deployed on Base Mainnet, this project utilizes fast block times and low transac
 ## Contributing & Setup
 1. Clone the repository
 2. Install dependencies via `npm install`
-3. Run the development server via `npm run dev` (Starts Vite SPA + Express API layer on port 3000)
+3. Run the development server via `npm run dev` 
 4. Or build and serve for production using `npm run build` & `npm run start`.
 
 Enjoy warping your capabilities to Base, commanded by your AI Orchestrator!

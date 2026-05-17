@@ -9,3 +9,14 @@ export async function GET() {
     version: "1.0.0"
   });
 }
+
+export async function POST(req: Request) {
+  return NextResponse.json({
+    name: "WarpMemo Orchestrator",
+    status: "active",
+    wallet: "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B",
+    platform: "WarpMemo",
+    version: "1.0.0",
+    message: "Agent endpoints are read-only"
+  });
+}
