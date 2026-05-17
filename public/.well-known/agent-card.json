@@ -7,6 +7,14 @@
   "wallets": {
     "base": "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B"
   },
+  "skills": [
+    { "id": "warp-racing", "name": "Warp Racing", "description": "Manage and analyze Warp Racing state" },
+    { "id": "multi-track-orchestration", "name": "Multi-Track Orchestration", "description": "Manage complex multi-track race operations" },
+    { "id": "performance-optimization", "name": "Performance Optimization", "description": "Optimize racing performance metrics" },
+    { "id": "real-time-automation", "name": "Real-Time Automation", "description": "Automate real-time racing interactions" },
+    { "id": "competitive-orchestration", "name": "Competitive Orchestration", "description": "Orchestrate competitive ecosystem mechanics" },
+    { "id": "ecosystem-coordination", "name": "Ecosystem Coordination", "description": "Coordinate broader ecosystem updates and tasks" }
+  ],
   "services": [
     {
       "name": "A2A",
