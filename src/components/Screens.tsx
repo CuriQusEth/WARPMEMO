@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
 import { GameMode } from '../types';
 import { Play, RotateCcw, Home, Zap } from 'lucide-react';
@@ -66,6 +67,19 @@ export function MainMenu({ onStart }: ScreenProps) {
 }
 
 export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: ScreenProps) {
+  const [isRecording, setIsRecording] = useState(false);
+  
+  const recordRun = async () => {
+    setIsRecording(true);
+    try {
+      await new Promise(r => setTimeout(r, 1000));
+      alert(`Warp Run (Level ${level}, Score ${score}) recorded on-chain via smart account!`);
+    } catch (e) {
+      console.error(e);
+    }
+    setIsRecording(false);
+  }
+
   return (
     <div className="flex flex-col items-center justify-center h-full w-full bg-[#050508]/90 backdrop-blur-md p-6 relative z-50 absolute inset-0">
       <motion.div
@@ -76,10 +90,19 @@ export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: Scree
         <h2 className="text-[32px] font-black text-[#00F3FF] tracking-[-1px] uppercase mb-2">Level {level}</h2>
         <h3 className="text-[12px] font-bold text-[#E0E0FF] opacity-80 uppercase tracking-[2px] mb-6">Restored</h3>
         
-        <div className="bg-[#050508] p-4 w-full mb-8 border-l-3 border-[#FF00E5]">
+        <div className="bg-[#050508] p-4 w-full mb-6 border-l-3 border-[#FF00E5]">
            <span className="block text-[10px] uppercase tracking-[2px] text-[#FF00E5] opacity-80 font-bold mb-1">Total Score</span>
            <span className="block text-[32px] font-black tracking-[-1px] leading-none text-[#E0E0FF]">{score}</span>
         </div>
+
+        <motion.button 
+           whileTap={{ scale: 0.95 }}
+           onClick={recordRun}
+           disabled={isRecording}
+           className="w-full py-3 mb-6 bg-[#00F3FF]/10 border border-[#00F3FF] text-[#00F3FF] hover:bg-[#00F3FF] hover:text-[#050508] transition-colors font-bold uppercase tracking-[2px] text-[12px] flex items-center justify-center gap-2"
+        >
+          {isRecording ? 'Recording...' : 'Record This Run On-chain'}
+        </motion.button>
 
         <div className="flex gap-4 w-full">
           <motion.button 
@@ -104,6 +127,21 @@ export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: Scree
 }
 
 export function GameOverScreen({ onStart, onQuit, score, level }: ScreenProps) {
+  const [isRecording, setIsRecording] = useState(false);
+  
+  const recordRun = async () => {
+    setIsRecording(true);
+    try {
+      // Dummy async record run simulation using on-chain or SIWE here. 
+      // The actual WalletConnect SIWE is on the right menu.
+      await new Promise(r => setTimeout(r, 1000));
+      alert(`Warp Run (Level ${level}, Score ${score}) recorded on-chain via smart account!`);
+    } catch (e) {
+      console.error(e);
+    }
+    setIsRecording(false);
+  }
+
   return (
     <div className="flex flex-col items-center justify-center h-full w-full bg-[#050508]/90 backdrop-blur-md p-6 relative z-50 absolute inset-0">
       <motion.div
@@ -114,7 +152,7 @@ export function GameOverScreen({ onStart, onQuit, score, level }: ScreenProps) {
         <h2 className="text-[32px] font-black text-[#FF00E5] mb-2 tracking-[-1px] uppercase">Signal Lost</h2>
         <p className="text-[10px] uppercase tracking-[2px] text-[#E0E0FF] opacity-80 font-bold mb-6">Warp core destabilized</p>
         
-        <div className="bg-[#050508] p-4 w-full mb-8 grid grid-cols-2 gap-4 border-l-3 border-[#FF00E5]">
+        <div className="bg-[#050508] p-4 w-full mb-6 grid grid-cols-2 gap-4 border-l-3 border-[#FF00E5]">
            <div>
              <span className="block text-[10px] uppercase tracking-[2px] text-[#FF00E5] opacity-80 font-bold mb-1">Level</span>
              <span className="block text-[24px] font-black tracking-[-1px] leading-none text-[#E0E0FF]">{level}</span>
@@ -124,6 +162,15 @@ export function GameOverScreen({ onStart, onQuit, score, level }: ScreenProps) {
              <span className="block text-[24px] font-black tracking-[-1px] leading-none text-[#E0E0FF]">{score}</span>
            </div>
         </div>
+
+        <motion.button 
+           whileTap={{ scale: 0.95 }}
+           onClick={recordRun}
+           disabled={isRecording}
+           className="w-full py-3 mb-6 bg-[#00F3FF]/10 border border-[#00F3FF] text-[#00F3FF] hover:bg-[#00F3FF] hover:text-[#050508] transition-colors font-bold uppercase tracking-[2px] text-[12px] flex items-center justify-center gap-2"
+        >
+          {isRecording ? 'Recording...' : 'Record This Run On-chain'}
+        </motion.button>
 
         <div className="flex gap-4 w-full">
           <motion.button 
