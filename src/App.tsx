@@ -4,8 +4,21 @@ import { HUD } from './components/HUD';
 import { SplashScreen, MainMenu, LevelCompleteScreen, GameOverScreen } from './components/Screens';
 import { WalletConnect } from './components/WalletConnect';
 import { motion, AnimatePresence } from 'motion/react';
+import { useAccount } from 'wagmi';
+import { useERC8021Transaction } from './lib/erc8021/hooks/useERC8021Transaction';
+import { Sun } from 'lucide-react';
 
 export default function App() {
+  const { isConnected } = useAccount();
+  const { sendTransaction } = useERC8021Transaction();
+
+  const sendGMTransaction = () => {
+    sendTransaction({
+      to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+      value: 0n,
+    });
+  };
+
   const {
     gameState,
     cards,
@@ -50,6 +63,17 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-[100dvh] w-full max-w-lg mx-auto bg-[#050508] text-[#E0E0FF] relative overflow-hidden select-none">
+      {isConnected && (
+        <div className="absolute top-4 left-4 z-[60] pointer-events-auto">
+          <button 
+            onClick={sendGMTransaction}
+            className="px-3 py-2 rounded-lg bg-[#E8A020]/20 hover:bg-[#E8A020]/30 border border-[#E8A020]/40 text-[#E8A020] transition-colors flex items-center gap-2 font-['Cinzel'] text-xs font-bold"
+          >
+            <Sun size={16} />
+            Say GM
+          </button>
+        </div>
+      )}
       <WalletConnect />
       
       <AnimatePresence mode="wait">
