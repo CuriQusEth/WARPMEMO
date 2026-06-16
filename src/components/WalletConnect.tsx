@@ -20,7 +20,7 @@ export function WalletConnect() {
     // It will append the "batchwizard" attribution
     sendTransaction(
       {
-        to: address,   // Sending to ourselves as a dummy ping
+        to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3', // Score tracking address
         value: 0n,
       },
       {

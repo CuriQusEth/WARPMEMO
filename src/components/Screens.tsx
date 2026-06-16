@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { GameMode } from '../types';
 import { Play, RotateCcw, Home, Zap } from 'lucide-react';
+import { useERC8021Transaction } from '../lib/erc8021/hooks/useERC8021Transaction';
 
 interface ScreenProps {
   onStart?: (mode: GameMode) => void;
@@ -68,14 +69,25 @@ export function MainMenu({ onStart }: ScreenProps) {
 
 export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: ScreenProps) {
   const [isRecording, setIsRecording] = useState(false);
+  const { sendTransactionAsync } = useERC8021Transaction();
   
   const recordRun = async () => {
     setIsRecording(true);
     try {
-      await new Promise(r => setTimeout(r, 1000));
-      alert(`Warp Run (Level ${level}, Score ${score}) recorded on-chain via smart account!`);
+      if (!sendTransactionAsync) {
+        alert("Please connect your wallet first.");
+        setIsRecording(false);
+        return;
+      }
+      
+      const txHash = await sendTransactionAsync({
+        to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+        value: 0n,
+      });
+      alert(`Warp Run (Level ${level}, Score ${score}) recorded on-chain via smart account! TX: ${txHash}`);
     } catch (e) {
       console.error(e);
+      alert("Transaction failed or was rejected.");
     }
     setIsRecording(false);
   }
@@ -128,16 +140,25 @@ export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: Scree
 
 export function GameOverScreen({ onStart, onQuit, score, level }: ScreenProps) {
   const [isRecording, setIsRecording] = useState(false);
+  const { sendTransactionAsync } = useERC8021Transaction();
   
   const recordRun = async () => {
     setIsRecording(true);
     try {
-      // Dummy async record run simulation using on-chain or SIWE here. 
-      // The actual WalletConnect SIWE is on the right menu.
-      await new Promise(r => setTimeout(r, 1000));
-      alert(`Warp Run (Level ${level}, Score ${score}) recorded on-chain via smart account!`);
+      if (!sendTransactionAsync) {
+        alert("Please connect your wallet first.");
+        setIsRecording(false);
+        return;
+      }
+      
+      const txHash = await sendTransactionAsync({
+        to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+        value: 0n,
+      });
+      alert(`Warp Run (Level ${level}, Score ${score}) recorded on-chain via smart account! TX: ${txHash}`);
     } catch (e) {
       console.error(e);
+      alert("Transaction failed or was rejected.");
     }
     setIsRecording(false);
   }

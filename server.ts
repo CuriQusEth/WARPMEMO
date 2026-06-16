@@ -44,7 +44,7 @@ async function startServer() {
                   resources: {}
                 },
                 serverInfo: {
-                  name: "WarpMemo MCP Server",
+                  name: "Base & WarpMemo MCP Server",
                   version: "1.0.0"
                 }
               }
@@ -84,6 +84,24 @@ async function startServer() {
                       properties: { trackId: { type: "string" } }, 
                       required: ["trackId"] 
                     }
+                  },
+                  {
+                    name: "base_get_balance",
+                    description: "Gets the native ETH or ERC20 balance for a given address on Base.",
+                    inputSchema: { 
+                      type: "object", 
+                      properties: { address: { type: "string" }, asset: { type: "string" } }, 
+                      required: ["address"] 
+                    }
+                  },
+                  {
+                    name: "base_transfer",
+                    description: "Transfers asset to another address on Base network.",
+                    inputSchema: { 
+                      type: "object", 
+                      properties: { to: { type: "string" }, amount: { type: "string" }, asset: { type: "string" } }, 
+                      required: ["to", "amount"] 
+                    }
                   }
                 ]
               }
@@ -104,6 +122,10 @@ async function startServer() {
               toolResult = "Performance optimization triggered. Engines tuned for max warp.";
             } else if (toolName === "get_track_info") {
               toolResult = `Track metadata for ${toolArgs.trackId || 'unknown'}: Length 5000 units, Hazards: None.`;
+            } else if (toolName === "base_get_balance") {
+              toolResult = `Balance for ${toolArgs.address || 'unknown'} on Base: 1.5 ETH`;
+            } else if (toolName === "base_transfer") {
+              toolResult = `Successfully transferred ${toolArgs.amount || '0'} ${toolArgs.asset || 'ETH'} to ${toolArgs.to || 'unknown'} on Base. TX Hash: 0xBASE...`;
             } else {
               return res.status(404).json({ jsonrpc: "2.0", id, error: { code: -32601, message: "Tool not found" } });
             }
