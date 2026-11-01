@@ -23,10 +23,11 @@ export function useERC8021Transaction() {
           optional: true
         };
         
-        result = await sendCallsAsync({
+        const callsResult = await sendCallsAsync({
           calls: [args],
           capabilities
         }, options);
+        result = typeof callsResult === 'string' ? callsResult : (callsResult as any)?.id || String(callsResult);
       } else {
         const data = args.data ? `${args.data}${suffix.slice(2)}` : suffix;
         result = await sendTransactionAsync({

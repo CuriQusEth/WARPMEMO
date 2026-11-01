@@ -5,7 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="talentapp:project_verification" content="8daa8a48295faff9a25840140bfa5cb0eff0df0f8f918d22e3aa6f71b907f60f921f54d068cb34d4fdca33166c81f121c86efa8bb71fd7d5baad026b578673a2">
     <meta name="base:app_id" content="68f41d64b6320e0dd0819afd" />
-    <title>My Google AI Studio App</title>
+    <meta name="description" content="A fast-paced, sci-fi themed memory matching game with a unique Warp swapping mechanic." />
+    <meta property="og:title" content="Warp Memory" />
+    <meta property="og:description" content="A fast-paced, sci-fi themed memory matching game with a unique Warp swapping mechanic." />
+    <title>Warp Memory</title>
+    <script>
+      // Defensive shim against multiple Web3 wallet extensions (e.g. Zerion, MetaMask, Coinbase) 
+      // colliding on non-configurable properties like window.ethereum.isZerion
+      (function() {
+        var originalDefineProperty = Object.defineProperty;
+        Object.defineProperty = function(obj, prop, descriptor) {
+          try {
+            if (descriptor && typeof descriptor === 'object' && descriptor.configurable === undefined) {
+              descriptor.configurable = true;
+            }
+            return originalDefineProperty.call(Object, obj, prop, descriptor);
+          } catch (err) {
+            if (err instanceof TypeError && typeof err.message === 'string' && err.message.indexOf('Cannot redefine property') !== -1) {
+              try {
+                if (descriptor && 'value' in descriptor) {
+                  obj[prop] = descriptor.value;
+                }
+              } catch (_) {}
+              return obj;
+            }
+            throw err;
+          }
+        };
+
+        window.addEventListener('error', function(event) {
+          if (event && event.message && typeof event.message === 'string' && event.message.indexOf('isZerion') !== -1) {
+            event.preventDefault();
+            if (typeof event.stopImmediatePropagation === 'function') {
+              event.stopImmediatePropagation();
+            }
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          if (event && event.reason && typeof event.reason.message === 'string' && event.reason.message.indexOf('isZerion') !== -1) {
+            event.preventDefault();
+            if (typeof event.stopImmediatePropagation === 'function') {
+              event.stopImmediatePropagation();
+            }
+          }
+        }, true);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
