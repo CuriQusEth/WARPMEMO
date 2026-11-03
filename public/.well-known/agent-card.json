@@ -41,9 +41,10 @@
     "task-automation",
     "daily-operations",
     "multi-platform-management",
-    "mcp-command-execution"
+    "mcp-command-execution",
+    "denim-200ms-blocks"
   ],
-  "supportedChains": ["eip155:8453"],
+  "supportedChains": ["eip155:8453", "eip155:84532"],
   "active": true,
   "status": "online"
 }

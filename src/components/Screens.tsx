@@ -69,13 +69,15 @@ export function MainMenu({ onStart }: ScreenProps) {
 
 export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: ScreenProps) {
   const [isRecording, setIsRecording] = useState(false);
+  const [recordStatus, setRecordStatus] = useState<string | null>(null);
   const { sendTransactionAsync } = useERC8021Transaction();
   
   const recordRun = async () => {
     setIsRecording(true);
+    setRecordStatus(null);
     try {
       if (!sendTransactionAsync) {
-        alert("Please connect your wallet first.");
+        setRecordStatus("Please connect your wallet first.");
         setIsRecording(false);
         return;
       }
@@ -84,10 +86,10 @@ export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: Scree
         to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
         value: 0n,
       });
-      alert(`Warp Run (Level ${level}, Score ${score}) recorded on-chain via smart account! TX: ${txHash}`);
-    } catch (e) {
+      setRecordStatus(`⚡ Denim 200ms Confirmed! TX: ${String(txHash).slice(0, 14)}...`);
+    } catch (e: any) {
       console.error(e);
-      alert("Transaction failed or was rejected.");
+      setRecordStatus("Transaction failed or was rejected.");
     }
     setIsRecording(false);
   }
@@ -111,10 +113,16 @@ export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: Scree
            whileTap={{ scale: 0.95 }}
            onClick={recordRun}
            disabled={isRecording}
-           className="w-full py-3 mb-6 bg-[#00F3FF]/10 border border-[#00F3FF] text-[#00F3FF] hover:bg-[#00F3FF] hover:text-[#050508] transition-colors font-bold uppercase tracking-[2px] text-[12px] flex items-center justify-center gap-2"
+           className="w-full py-3 mb-2 bg-[#00F3FF]/10 border border-[#00F3FF] text-[#00F3FF] hover:bg-[#00F3FF] hover:text-[#050508] transition-colors font-bold uppercase tracking-[2px] text-[12px] flex items-center justify-center gap-2"
         >
-          {isRecording ? 'Recording...' : 'Record This Run On-chain'}
+          {isRecording ? 'Recording on Denim (200ms)...' : 'Record This Run On-chain'}
         </motion.button>
+
+        {recordStatus && (
+          <div className="text-[10px] text-[#00F3FF] font-mono mb-4 px-2 py-1 bg-[#001428] border border-[#00F3FF]/40 rounded w-full truncate">
+            {recordStatus}
+          </div>
+        )}
 
         <div className="flex gap-4 w-full">
           <motion.button 
@@ -140,13 +148,15 @@ export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: Scree
 
 export function GameOverScreen({ onStart, onQuit, score, level }: ScreenProps) {
   const [isRecording, setIsRecording] = useState(false);
+  const [recordStatus, setRecordStatus] = useState<string | null>(null);
   const { sendTransactionAsync } = useERC8021Transaction();
   
   const recordRun = async () => {
     setIsRecording(true);
+    setRecordStatus(null);
     try {
       if (!sendTransactionAsync) {
-        alert("Please connect your wallet first.");
+        setRecordStatus("Please connect your wallet first.");
         setIsRecording(false);
         return;
       }
@@ -155,10 +165,10 @@ export function GameOverScreen({ onStart, onQuit, score, level }: ScreenProps) {
         to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
         value: 0n,
       });
-      alert(`Warp Run (Level ${level}, Score ${score}) recorded on-chain via smart account! TX: ${txHash}`);
-    } catch (e) {
+      setRecordStatus(`⚡ Denim 200ms Confirmed! TX: ${String(txHash).slice(0, 14)}...`);
+    } catch (e: any) {
       console.error(e);
-      alert("Transaction failed or was rejected.");
+      setRecordStatus("Transaction failed or was rejected.");
     }
     setIsRecording(false);
   }

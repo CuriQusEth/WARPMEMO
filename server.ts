@@ -19,7 +19,7 @@ async function startServer() {
       name: "WarpMemo MCP Endpoint",
       status: "active",
       description: "Active MCP server for WarpMemo Orchestrator Agent",
-      capabilities: ["memo-management", "content-generation", "task-automation"],
+      capabilities: ["memo-management", "content-generation", "task-automation", "denim-200ms-blocks"],
       timestamp: new Date().toISOString()
     });
   });
@@ -102,6 +102,11 @@ async function startServer() {
                       properties: { to: { type: "string" }, amount: { type: "string" }, asset: { type: "string" } }, 
                       required: ["to", "amount"] 
                     }
+                  },
+                  {
+                    name: "base_denim_status",
+                    description: "Returns Base Denim upgrade status, native 200ms canonical block parameters, and network readiness.",
+                    inputSchema: { type: "object", properties: {}, required: [] }
                   }
                 ]
               }
@@ -123,9 +128,11 @@ async function startServer() {
             } else if (toolName === "get_track_info") {
               toolResult = `Track metadata for ${toolArgs.trackId || 'unknown'}: Length 5000 units, Hazards: None.`;
             } else if (toolName === "base_get_balance") {
-              toolResult = `Balance for ${toolArgs.address || 'unknown'} on Base: 1.5 ETH`;
+              toolResult = `Balance for ${toolArgs.address || 'unknown'} on Base (canonical latest): 1.5 ETH`;
             } else if (toolName === "base_transfer") {
-              toolResult = `Successfully transferred ${toolArgs.amount || '0'} ${toolArgs.asset || 'ETH'} to ${toolArgs.to || 'unknown'} on Base. TX Hash: 0xBASE...`;
+              toolResult = `Successfully transferred ${toolArgs.amount || '0'} ${toolArgs.asset || 'ETH'} to ${toolArgs.to || 'unknown'} on Base Denim. TX Hash: 0xBASE...`;
+            } else if (toolName === "base_denim_status") {
+              toolResult = "Base Denim upgrade: ACTIVE. Native 200ms canonical blocks enabled (Base Sepolia active, Base Mainnet targeting Nov 2026). Flashblocks replaced; pending state tags deprecated in favor of canonical latest blocks.";
             } else {
               return res.status(404).json({ jsonrpc: "2.0", id, error: { code: -32601, message: "Tool not found" } });
             }
