@@ -132,7 +132,7 @@ async function startServer() {
             } else if (toolName === "base_transfer") {
               toolResult = `Successfully transferred ${toolArgs.amount || '0'} ${toolArgs.asset || 'ETH'} to ${toolArgs.to || 'unknown'} on Base Denim. TX Hash: 0xBASE...`;
             } else if (toolName === "base_denim_status") {
-              toolResult = "Base Denim upgrade: ACTIVE. Native 200ms canonical blocks enabled (Base Sepolia active, Base Mainnet targeting Nov 2026). Flashblocks replaced; pending state tags deprecated in favor of canonical latest blocks.";
+              toolResult = "Base Denim upgrade: LIVE ON MAINNET. Native 200ms canonical blocks active on Base Mainnet (activated Nov 5, 2026) and Base Sepolia (activated Oct 21, 2026). Flashblocks retired; pending state tags deprecated in favor of canonical latest 200ms blocks.";
             } else {
               return res.status(404).json({ jsonrpc: "2.0", id, error: { code: -32601, message: "Tool not found" } });
             }

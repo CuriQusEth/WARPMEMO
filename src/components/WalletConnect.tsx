@@ -22,8 +22,14 @@ export function WalletConnect() {
     pollingInterval: 250,
   })
 
+  const isBaseMainnet = chainId === base.id
   const isBaseSepolia = chainId === baseSepolia.id
-  const currentNetworkName = isBaseSepolia ? 'Base Sepolia (Denim Live)' : 'Base Mainnet'
+  const isWrongNetwork = isConnected && !isBaseMainnet && !isBaseSepolia
+  const currentNetworkName = isBaseMainnet 
+    ? 'Base Mainnet (Denim 200ms Live)' 
+    : isBaseSepolia 
+    ? 'Base Sepolia (Denim Live)' 
+    : 'Unsupported Network'
   const explorerUrl = isBaseSepolia ? 'https://sepolia.basescan.org' : 'https://basescan.org'
 
   const showNotice = (msg: string) => {
@@ -35,7 +41,7 @@ export function WalletConnect() {
     if (!address) return
     setTxHash(null)
     
-    // ERC-8021 with BUILDER_CODE bc_k9081lrh appended
+    // ERC-8021 with BUILDER_CODE bc_k9081lrh appended on Base Mainnet
     sendTransaction(
       {
         to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3', // Score tracking address
@@ -45,7 +51,7 @@ export function WalletConnect() {
         onSuccess: (hash) => {
           const hashStr = hash as string
           setTxHash(hashStr)
-          showNotice(`Tx submitted to Base Denim! Hash: ${hashStr.slice(0, 10)}...`)
+          showNotice(`Tx submitted to Base Mainnet Denim! Hash: ${hashStr.slice(0, 10)}...`)
         },
         onError: (err: any) => {
           showNotice(`Tx error: ${err?.message?.slice(0, 40) || 'Rejected'}`)
@@ -65,7 +71,7 @@ export function WalletConnect() {
         nonce: generateSiweNonce(),
         uri: window.location.origin,
         version: '1',
-        statement: `I am confirming my identity to join the Warp Memory leaderboard on Base Denim.`,
+        statement: `I am confirming my identity to join the Warp Memory leaderboard on Base Mainnet Denim.`,
       });
       const signature = await signMessageAsync({ account: address, message });
       showNotice(`SIWE Verified: ${signature.slice(0, 18)}...`);
@@ -76,15 +82,24 @@ export function WalletConnect() {
     setIsSigning(false);
   }
 
-  const handleSwitchNetwork = () => {
+  const handleSwitchNetwork = (targetId: number = base.id) => {
     if (!switchChain) return
-    const targetChainId = isBaseSepolia ? base.id : baseSepolia.id
-    switchChain({ chainId: targetChainId })
+    switchChain({ chainId: targetId })
   }
 
   if (isConnected) {
     return (
       <div className="absolute top-4 right-4 z-[60] flex flex-col items-end gap-2 text-right pointer-events-auto max-w-[280px]">
+        {/* Wrong network alert if not on Base */}
+        {isWrongNetwork && (
+          <button
+            onClick={() => handleSwitchNetwork(base.id)}
+            className="w-full bg-[#FF00E5] text-white p-2 rounded text-[10px] uppercase font-bold tracking-[1px] animate-bounce shadow-[0_0_15px_#FF00E5]"
+          >
+            ⚠️ Switch to Base Mainnet
+          </button>
+        )}
+
         {/* Denim Status & Account Badge */}
         <div className="bg-[#0A1128]/95 backdrop-blur-md border border-[#2D5A8E] rounded p-3 shadow-[0_0_20px_rgba(0,243,255,0.15)] text-[#E0E0FF] text-[10px] uppercase font-bold tracking-[1px] w-full">
           <div className="flex items-center justify-between gap-2 border-b border-[#1A3A5A] pb-1.5 mb-1.5">
@@ -93,19 +108,28 @@ export function WalletConnect() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00F3FF] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00F3FF]"></span>
               </span>
-              DENIM 200MS
+              DENIM MAINNET 200MS
             </span>
             <span className="text-[#FF00E5] text-[9px] font-mono">{BUILDER_CODE}</span>
           </div>
 
           <div className="flex items-center justify-between text-[9px] text-[#A0B0D0] mb-1">
-            <span>{currentNetworkName}</span>
-            <button 
-              onClick={handleSwitchNetwork} 
-              className="text-[#00F3FF] underline hover:text-white transition-colors"
-            >
-              Switch
-            </button>
+            <span className={isBaseMainnet ? "text-[#00F3FF] font-bold" : ""}>{currentNetworkName}</span>
+            {!isBaseMainnet ? (
+              <button 
+                onClick={() => handleSwitchNetwork(base.id)} 
+                className="text-[#FF00E5] underline hover:text-white transition-colors"
+              >
+                Go Mainnet
+              </button>
+            ) : (
+              <button 
+                onClick={() => handleSwitchNetwork(baseSepolia.id)} 
+                className="text-[#A0B0D0] hover:text-white transition-colors text-[8px]"
+              >
+                (Sepolia)
+              </button>
+            )}
           </div>
 
           <div className="text-[10px] text-[#E0E0FF] font-mono">
@@ -113,7 +137,7 @@ export function WalletConnect() {
           </div>
           
           <div className="flex items-center justify-between mt-2 pt-1 border-t border-[#1A3A5A]/60">
-            <span className="text-[8px] text-[#00F3FF]/70 tracking-normal normal-case">Canonical blocks (No pending lag)</span>
+            <span className="text-[8px] text-[#00F3FF]/70 tracking-normal normal-case">Canonical blocks (0s pending lag)</span>
             <button 
               onClick={() => disconnect()}
               className="text-[#FF00E5] hover:text-white transition-colors text-[9px]"
@@ -138,7 +162,7 @@ export function WalletConnect() {
             disabled={isPending || isConfirming}
             className="bg-[#FF00E5]/10 border border-[#FF00E5] text-[#FF00E5] px-3 py-1.5 rounded text-[10px] uppercase font-bold tracking-[1px] hover:bg-[#FF00E5] hover:text-white transition-colors disabled:opacity-50"
           >
-            {isPending ? 'Submitting...' : isConfirming ? '200ms Mining...' : 'Say GM'}
+            {isPending ? 'Submitting...' : isConfirming ? '200ms Mining...' : 'Say GM (Mainnet)'}
           </button>
         </div>
 
@@ -186,10 +210,12 @@ export function WalletConnect() {
           Connect {connector.name}
         </button>
       ))}
-      <div className="text-[9px] text-[#00F3FF]/70 tracking-[1px] uppercase text-right font-mono">
-        Denim 200ms Enabled
+      <div className="text-[9px] text-[#00F3FF] tracking-[1px] uppercase text-right font-mono font-bold flex items-center justify-end gap-1.5">
+        <span className="h-1.5 w-1.5 rounded-full bg-[#00F3FF] animate-ping inline-block" />
+        Base Mainnet Denim (200ms)
       </div>
     </div>
   )
 }
+
 

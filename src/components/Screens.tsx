@@ -86,7 +86,7 @@ export function LevelCompleteScreen({ onNextLevel, onQuit, score, level }: Scree
         to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
         value: 0n,
       });
-      setRecordStatus(`⚡ Denim 200ms Confirmed! TX: ${String(txHash).slice(0, 14)}...`);
+      setRecordStatus(`⚡ Base Mainnet Denim (200ms) Confirmed! TX: ${String(txHash).slice(0, 14)}...`);
     } catch (e: any) {
       console.error(e);
       setRecordStatus("Transaction failed or was rejected.");
@@ -165,7 +165,7 @@ export function GameOverScreen({ onStart, onQuit, score, level }: ScreenProps) {
         to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
         value: 0n,
       });
-      setRecordStatus(`⚡ Denim 200ms Confirmed! TX: ${String(txHash).slice(0, 14)}...`);
+      setRecordStatus(`⚡ Base Mainnet Denim (200ms) Confirmed! TX: ${String(txHash).slice(0, 14)}...`);
     } catch (e: any) {
       console.error(e);
       setRecordStatus("Transaction failed or was rejected.");
